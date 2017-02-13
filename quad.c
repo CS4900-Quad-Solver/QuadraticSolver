@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <errno.h>
 
 /*Calculate B^2 - 4AC, if it is less than 0, returns -1 to tell main that their are no real solutions*/
 double calculate_discriminate(double A, double B, double C)
@@ -15,6 +16,7 @@ double calculate_discriminate(double A, double B, double C)
 
     return discriminate;
 }
+
 /*Calculate 2A, if 2A is 0 there will be no solutions*/
 double calculate_denominator(double A)
 {
@@ -22,6 +24,7 @@ double calculate_denominator(double A)
     return denominator;
 }
 
+/*Calculates the quadratic, then stores answers in answers array*/
 void calculate_quadratic(double A, double B, double C, double * answers)
 {
     double denominator;
@@ -77,10 +80,15 @@ int main()
         double A = strtod(char_A, NULL); /*Coefficient of X^2*/
         double B = strtod(char_B, NULL); /*Coefficient of X*/
         double C = strtod(char_C, NULL); /*Coefficient of X^0*/
+        if ((A == 0 || B == 0 || C == 0) & (errno == ERANGE))
+        {
 
-        calculate_quadratic(A, B, C, answers);
-        fprintf(stdout, "X1: %f\nX2: %f\n", answers[0], answers[1]);
-
+        }
+        else
+        {
+            calculate_quadratic(A, B, C, answers);
+            fprintf(stdout, "X1: %f\nX2: %f\n", answers[0], answers[1]);
+        }
     }
 
     free(buffer);
