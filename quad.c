@@ -117,7 +117,7 @@ int main()
                     }
                     else if (error == -2)
                     {
-                        printf( BOLDRED "\nNo solutions\n\n" RESET);
+                        printf( BOLDRED "\nNo solution, A cannot be 0\n\n" RESET);
                     }
                     else
                     {
