@@ -109,7 +109,14 @@ int main()
 
                     if (error == 0)
                     {
-                        fprintf(stdout, BOLDBLUE "\nX1: %f\nX2: %f\n\n" RESET, answers[0], answers[1]);
+                        if (answers[0] == answers[1])
+                        {
+                            fprintf(stdout, BOLDBLUE "\nOnly one solution\nX: %f\n\n" RESET, answers[0]);
+                        }
+                        else
+                        {
+                            fprintf(stdout, BOLDBLUE "\nX1: %f\nX2: %f\n\n" RESET, answers[0], answers[1]);
+                        }
                     }
                     else if (error == -1)
                     {
