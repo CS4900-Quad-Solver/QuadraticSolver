@@ -80,8 +80,12 @@ int main()
         char_B = strtok(NULL, ",");
         char_C = strtok(NULL, ",");
 
-        /*If 3 arguments where not entered, one of the char_*s will return NULL, if so, inform user he much enter 3 arguments*/
-        if (char_A[0] != 'q')
+        /*Tons of error checking to ensure the user gets the right response from his mistype*/
+        if (char_A[0] == 'q' && char_B == NULL && char_C == NULL)
+        {
+            fprintf(stdout, "\nExiting...\n");
+        }
+        else
         {
             if (char_A == NULL || char_B == NULL || char_C == NULL)
             {
@@ -121,10 +125,6 @@ int main()
                     }
                 }
             }
-        }
-        else
-        {
-            fprintf(stdout, "Exiting...\n");
         }
     }
 
