@@ -29,7 +29,7 @@ double calculate_denominator(double A)
 }
 
 /*Calculates the quadratic, then stores answers in answers array*/
-int calculate_quadratic(double A, double B, double C, double * answers)
+int calculate_quadratic(double A, double B, double C, float * answers)
 {
     double denominator;
     double discriminate;
@@ -59,17 +59,17 @@ int calculate_quadratic(double A, double B, double C, double * answers)
 
 int main()
 {
-    /*Variables for parsing input*/
+    /*Variables for pars==54946==   total heap usage: 2 allocs, 0 frees, 1,0ing input*/
     size_t size = 1024;
     int error;
 
     char * buffer = malloc(sizeof(char) * size);
-
-    char * char_A;
+    char temp = ' ';
+    char * char_A = &temp;
     char * char_B;
     char * char_C;
     char * endptr;
-    double * answers = malloc(sizeof(double) * 2);
+    float * answers = malloc(sizeof(float) * 2);
 
     while (char_A[0] != 'q')
     {
@@ -134,7 +134,6 @@ int main()
             }
         }
     }
-
     free(buffer);
     free(answers);
     return error;
