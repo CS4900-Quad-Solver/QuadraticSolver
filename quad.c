@@ -3,59 +3,15 @@
 #include <string.h>
 #include <math.h>
 #include <errno.h>
+#include <float.h>
+#include "calc_quad.h"
+#include "calc_discrim.h"
+#include "calc_denom.h"
+#include "ieee_comply.h"
 
 #define BOLDBLUE	 "\033[1m\033[34m"		/* Bold Blue 	*/
 #define BOLDRED	  "\033[1m\033[31m"		/* Bold Red 		*/
 #define RESET	"\033[0m"		/* Reset 	*/
-
-/*Calculate B^2 - 4AC, if it is less than 0, returns -1 to tell main that their are no real solutions*/
-double calculate_discriminate(double A, double B, double C)
-{
-    double discriminate = (B*B) - (4*A*C);
-
-    if (discriminate < 0)
-    {
-        discriminate = -1;
-    }
-
-    return discriminate;
-}
-
-/*Calculate 2A, if 2A is 0 there will be no solutions*/
-double calculate_denominator(double A)
-{
-    double denominator = 2*A;
-    return denominator;
-}
-
-/*Calculates the quadratic, then stores answers in answers array*/
-int calculate_quadratic(double A, double B, double C, float * answers)
-{
-    double denominator;
-    double discriminate;
-    int error = 0;
-
-    /*Checks if function returns -1, if so, there are no solutions*/
-    if ((denominator = calculate_denominator(A)) == 0)
-    {
-        error = -2;
-    }
-    else
-    {
-        /*Checks if function returns -1, if so there are no read solutions*/
-        if((discriminate = calculate_discriminate(A,B,C)) == -1)
-        {
-            error = -1;
-        }
-        else
-        {
-            /*Calcuating X1 and X2, then return them.*/
-            answers[0] = (-B + sqrt(discriminate))/denominator;
-            answers[1] = (-B - sqrt(discriminate))/denominator;
-        }
-    }
-    return error;
-}
 
 int main()
 {
@@ -70,8 +26,8 @@ int main()
     char * char_C;
     char * endptr;
     float * answers = malloc(sizeof(float) * 2);
-
-    while (char_A[0] != 'q')
+	
+	while (char_A[0] != 'q')
     {
         error = 0;
         fprintf(stdout, "Please Enter the Coefficients of X^2, X, X^0 as A,B,C\nSo we can solve for X using the quadratic equation\nEnter q to quit\n");
@@ -97,16 +53,23 @@ int main()
                 double A = strtod(char_A, &endptr); /*Coefficient of X^2*/
                 double B = strtod(char_B, &endptr); /*Coefficient of X*/
                 double C = strtod(char_C, &endptr); /*Coefficient of X^0*/
-
+				
+				/*Checks if input is within single floating-point precision*/
+				error = check_input(A, B, C);
+				
                 if (char_A == endptr || char_B == endptr || char_C == endptr)
                 {
-                    fprintf(stdout, BOLDRED "\nNOTICE: Please make sure Arguments are numbers\n" RESET);
+                    fprintf(stdout, BOLDRED "\nNOTICE: Please make sure Arguments are numbers\n\n" RESET);
                 }
+				else if (error == -3)
+				{
+					fprintf(stdout, BOLDRED "\nNOTICE: Input is NOT within single-point precision\n\n" RESET);
+				}
                 else
                 {
 
                     error = calculate_quadratic(A, B, C, answers);
-
+					
                     if (error == 0)
                     {
                         if (answers[0] == answers[1])
@@ -126,6 +89,10 @@ int main()
                     {
                         printf( BOLDRED "\nNo solution, A cannot be 0\n\n" RESET);
                     }
+					else if (error == -4)
+					{
+						fprintf(stdout, BOLDRED "\nSolution is not within single-point precision\n\n" RESET);
+					}
                     else
                     {
                         fprintf(stdout, BOLDRED "\nERROR: Unknown\n\n" RESET);
