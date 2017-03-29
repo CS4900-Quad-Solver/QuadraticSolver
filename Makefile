@@ -3,9 +3,9 @@ main:
 
 test:
 	gcc -o test.o test.c calc_quad.c calc_discrim.c calc_denom.c ieee_comply.c cunit.c
-	
+
 run:
-	./quad2.o
-	
+	./quad.o
+
 runtest:
 	./test.o
